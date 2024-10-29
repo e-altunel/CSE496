@@ -1,0 +1,41 @@
+@startuml ProjectSchema
+
+left to right direction
+
+actor User
+
+node Project {
+	action CommandHandler
+	action HandleDisks
+	action CombineDisks
+	action enc as "Encryption\nModule"
+	database FileMap
+}
+node Disks {
+	database hdd as "HDD\n/dev/sda"
+	database ssd as "SSD\n/dev/sdb"
+	database part_of_hdd as "Partition of HDD\n/dev/sdc1"
+	database usb as "USB\n/dev/bus/usb"
+	database file as "Binary File in\nanother file system\n/home/user/Desktop/file.bin"
+}
+
+User -down-> CombineDisks
+User -down-> (Command)
+Command -down-> (Kernel)
+Kernel -down-> CommandHandler
+
+CombineDisks -down-> HandleDisks
+CommandHandler <-> FileMap: r/w
+CommandHandler -down-> HandleDisks
+HandleDisks <-right-> enc
+
+
+HandleDisks <-down-> hdd: r/w
+HandleDisks <-down-> ssd: r/w
+HandleDisks <-down-> part_of_hdd: r/w
+HandleDisks <-down-> usb: r/w
+HandleDisks <-down-> file: r/w
+
+
+
+@enduml

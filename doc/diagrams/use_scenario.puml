@@ -1,0 +1,33 @@
+@startuml UserScenario
+
+left to right direction
+
+actor User
+action Combiner
+action LowLevelDriver
+action Driver
+database hdd
+database ssd
+database usb
+
+User -down-> Combiner: "Combine multiple drives"
+Combiner -down-> Driver: "combine event"
+
+User -down-> (ls)
+User -down-> (cd)
+User -down-> (cat)
+User -down-> (...)
+
+ls -down-> (kernel)
+cd -down-> (kernel)
+cat -down-> (kernel)
+... -down-> (kernel)
+
+kernel -down-> LowLevelDriver: "the operation"
+LowLevelDriver -down-> Driver: "filesystem\nevent"
+
+Driver <-down-> hdd: r/w
+Driver <-down-> ssd: r/w
+Driver <-down-> usb: r/w
+
+@enduml
